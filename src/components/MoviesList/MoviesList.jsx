@@ -1,19 +1,26 @@
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { useLocation } from 'react-router-dom';
+
+import { MoviesListContainer } from './MoviesList.styled';
 
 const MoviesList = ({ trending }) => {
+  const location = useLocation();
+
   return (
-    <div>
+    <MoviesListContainer>
       <ul>
         {trending.map(({ title, name, id }) => {
           return (
             <li key={id}>
-              <Link to={`/movies/${id}`}>{name ?? title}</Link>
+              <Link to={`/movies/${id}`} state={{ from: location }}>
+                {name ?? title}
+              </Link>
             </li>
           );
         })}
       </ul>
-    </div>
+    </MoviesListContainer>
   );
 };
 
@@ -28,5 +35,3 @@ MoviesList.propTypes = {
     })
   ),
 };
-
-// state={{ from: location }}

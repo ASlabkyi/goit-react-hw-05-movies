@@ -1,11 +1,39 @@
 import { useState, useEffect, Suspense } from 'react';
-import { Link, Outlet, useParams } from 'react-router-dom';
+import { Link, Outlet, useParams, useLocation } from 'react-router-dom';
+import styled from '@emotion/styled';
 
 import { getMovieById } from 'services/moviesServices';
+
+import {
+  Container,
+  Poster,
+  Title,
+  UserScore,
+  Overview,
+  Genres,
+  GenreList,
+  GenreItem,
+  AdditionalInfo,
+  AdditionalInfoList,
+  AdditionalInfoItem,
+} from './MovieDetails.styled';
+
+const BackLink = styled(Link)`
+  margin-bottom: 1rem;
+  color: #0077ff;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
 
 const MovieDetails = () => {
   const [movieData, setMovieData] = useState({});
   const { movieId } = useParams();
+  const location = useLocation();
+
+  const detailsLink = location.state?.from ?? '/';
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -28,42 +56,50 @@ const MovieDetails = () => {
     genres,
   } = movieData;
   return (
-    <div>
-      <Link to="/">Go back</Link>
+    <Container>
+      <BackLink to={detailsLink} state={{ from: location }}>
+        Go back
+      </BackLink>
       {posterPath && (
-        <img
+        <Poster
           src={`https://image.tmdb.org/t/p/w500/${posterPath}`}
           alt={title ?? name}
         />
       )}
 
-      <h1>{title ?? name}</h1>
-      <p>User score: {Math.round(voteAverage * 10).toFixed(0) + '%'}</p>
-      <h3>Overview</h3>
+      <Title>{title ?? name}</Title>
+      <UserScore>
+        User score: {Math.round(voteAverage * 10).toFixed(0) + '%'}
+      </UserScore>
+      <Overview>Overview</Overview>
       <p>{overview}</p>
-      <h3>Genres</h3>
-      {genres?.map(({ name }, index) => (
-        <p key={index}>{name}</p>
-      ))}
-      <p>Additional information</p>
-      <ul>
-        <li>
-          <Link to={'cast'}>Cast</Link>
-        </li>
-        <li>
-          <Link to={'reviews'}>Reviews</Link>
-        </li>
-      </ul>
+      <Genres>Genres</Genres>
+      {genres?.length > 0 && (
+        <GenreList>
+          {genres.map(({ name }, index) => (
+            <GenreItem key={index}>{name}</GenreItem>
+          ))}
+        </GenreList>
+      )}
+      <AdditionalInfo>Additional information</AdditionalInfo>
+      <AdditionalInfoList>
+        <AdditionalInfoItem>
+          <BackLink to={'cast'} state={{ from: detailsLink }}>
+            Cast
+          </BackLink>
+        </AdditionalInfoItem>
+        <AdditionalInfoItem>
+          <BackLink to={'reviews'} state={{ from: detailsLink }}>
+            Reviews
+          </BackLink>
+        </AdditionalInfoItem>
+      </AdditionalInfoList>
 
       <Suspense fallback={<div>Loading...</div>}>
         <Outlet />
       </Suspense>
-    </div>
+    </Container>
   );
 };
 
 export default MovieDetails;
-
-// {
-//   location.state?.from ?? '/';
-// }

@@ -3,8 +3,10 @@ import { useParams } from 'react-router-dom';
 
 import { getCastById } from 'services/moviesServices';
 
+import { CastWrapper } from './Cast.styled';
+
 const Cast = () => {
-  const [movieCast, setMovieCast] = useState({});
+  const [movieCast, setMovieCast] = useState([]);
   const { movieId } = useParams();
 
   useEffect(() => {
@@ -21,12 +23,13 @@ const Cast = () => {
 
   return (
     <div>
-      <ul>
+      <CastWrapper>
         {movieCast.cast?.map(
           ({ id, character, name, profile_path: profilePath }) => (
             <li key={id}>
               {profilePath && (
                 <img
+                  height="225px"
                   src={`https://image.tmdb.org/t/p/w500/${profilePath}`}
                   alt={name}
                 />
@@ -36,7 +39,7 @@ const Cast = () => {
             </li>
           )
         )}
-      </ul>
+      </CastWrapper>
     </div>
   );
 };

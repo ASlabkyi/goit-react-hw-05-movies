@@ -3,8 +3,10 @@ import { useParams } from 'react-router-dom';
 
 import { getReviewsById } from 'services/moviesServices';
 
+import { ReviewsWrapper } from './Reviews.styled';
+
 const Reviews = () => {
-  const [movieReviews, setMoviesReviews] = useState({});
+  const [movieReviews, setMoviesReviews] = useState([]);
   const { movieId } = useParams();
 
   useEffect(() => {
@@ -20,7 +22,7 @@ const Reviews = () => {
   }, [movieId]);
 
   return (
-    <div>
+    <ReviewsWrapper>
       <ul>
         {movieReviews.length > 0
           ? movieReviews.map(({ author, content, id }) => (
@@ -31,7 +33,7 @@ const Reviews = () => {
             ))
           : `We don't have any reviews for this movie.`}
       </ul>
-    </div>
+    </ReviewsWrapper>
   );
 };
 

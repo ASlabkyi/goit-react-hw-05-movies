@@ -1,9 +1,10 @@
-// import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 import MoviesList from 'components/MoviesList/MoviesList';
 
 import { getTrending } from 'services/moviesServices';
+
+import { HomeContainer } from './Home.styled';
 
 const Home = () => {
   const [trending, setTrending] = useState([]);
@@ -21,10 +22,10 @@ const Home = () => {
   }, []);
 
   return (
-    <div>
+    <HomeContainer>
       <h2>Trending today</h2>
       <MoviesList trending={trending} />
-    </div>
+    </HomeContainer>
   );
 };
 
