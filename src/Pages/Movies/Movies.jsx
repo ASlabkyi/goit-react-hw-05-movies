@@ -11,7 +11,6 @@ const Movies = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [movieName, setMovieName] = useState('');
   const [movies, setMovies] = useState([]);
-  const [canLoad, setCanLoad] = useState(false);
 
   const handleChange = e => {
     const { value } = e.target;
@@ -20,7 +19,7 @@ const Movies = () => {
 
   const handleMovieSubmit = e => {
     e.preventDefault();
-    setCanLoad(true);
+
     setSearchParams(movieName !== '' ? { query: movieName } : {});
   };
 
@@ -29,12 +28,10 @@ const Movies = () => {
 
     try {
       getMovieByName(query).then(resp => setMovies(resp.results));
-
-      setCanLoad(false);
     } catch (error) {
       alert(error.message);
     }
-  }, [searchParams, canLoad]);
+  }, [searchParams]);
 
   return (
     <MoviesContainer>
